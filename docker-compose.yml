@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  open_humanoid_sim:
+    build: .
+    container_name: open_humanoid_sim
+    volumes:
+      - ./tests:/workspace/open_humanoid/tests
+      - ./datasets:/workspace/open_humanoid/datasets
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    network_mode: host
+    privileged: true
+    command: python3 control/main_controller.py
+
+  open_humanoid_ros2:
+    build: .
+    container_name: open_humanoid_ros2
+    volumes:
+      - ./:/workspace/open_humanoid/
+    network_mode: host
+    command: ros2 run open_humanoid ros2_node.py
+    depends_on:
+      - open_humanoid_sim

@@ -1,0 +1,13 @@
+numpy>=1.24.0
+matplotlib>=3.7.0
+pybullet>=3.2.5
+scipy>=1.10.0
+h5py>=3.8.0
+torch>=2.0.0
+opencv-python>=4.8.0
+pyyaml>=6.0
+tqdm>=4.65.0
+# ROS2 dependencies (install via apt)
+# ros-humble-desktop
+# ros-humble-ros2-control
+# ros-humble-ros2-controllers

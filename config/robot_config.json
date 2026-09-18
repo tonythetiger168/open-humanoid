@@ -1,0 +1,79 @@
+{
+  "project": {
+    "name": "OpenHumanoid-v1",
+    "version": "1.0.0",
+    "date": "2026-09-06",
+    "license": "MIT"
+  },
+  "robot": {
+    "height_m": 1.3,
+    "mass_kg": 30.0,
+    "dof": 28,
+    "leg_dof": 6,
+    "arm_dof": 7,
+    "torso_dof": 2,
+    "head_dof": 2,
+    "com_height_m": 0.8
+  },
+  "simulation": {
+    "engine": "PyBullet",
+    "sim_freq_hz": 240,
+    "control_freq_hz": 50,
+    "render_freq_hz": 30,
+    "gravity": [
+      0,
+      0,
+      -9.81
+    ],
+    "time_step_s": 0.004166666666666667
+  },
+  "control": {
+    "balance": {
+      "kp_com": 100.0,
+      "kd_com": 20.0,
+      "kp_orientation": 50.0,
+      "kd_orientation": 10.0,
+      "preview_steps": 320,
+      "com_height": 0.8
+    },
+    "gait": {
+      "step_length_m": 0.15,
+      "step_width_m": 0.16,
+      "step_height_m": 0.05,
+      "step_duration_s": 0.8,
+      "double_support_ratio": 0.2
+    },
+    "joint_pd": {
+      "kp": 50.0,
+      "kd": 2.0,
+      "max_force_nm": 100.0
+    }
+  },
+  "hardware": {
+    "compute": "NVIDIA_Jetson_AGX_Orin_64GB",
+    "motor_driver": "ODrive_Pro",
+    "motor_type": "MIT_Cheetah_style_BLDC",
+    "gear_ratio": 7.67,
+    "battery": "24V_20Ah_LiFePO4",
+    "depth_camera": "Intel_RealSense_D455",
+    "imu": "6-axis_MEMS_ICM-42688-P",
+    "communication": "CAN_FD_1Mbps"
+  },
+  "ai": {
+    "framework": "LeRobot_HuggingFace",
+    "policy_types": [
+      "ACT",
+      "DiffusionPolicy",
+      "RNN"
+    ],
+    "observation_keys": [
+      "images",
+      "state"
+    ],
+    "action_dim": 28,
+    "camera_resolution": [
+      640,
+      480
+    ]
+  }
+}

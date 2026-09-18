@@ -1,0 +1,57 @@
+# OpenHumanoid v1.0 - RL Reward Function Configuration
+
+reward_weights:
+  # Primary objectives
+  forward_velocity: 2.0        # Reward for moving at target velocity
+  balance_upright: 10.0        # Penalty for tilting (roll^2 + pitch^2)
+  height_maintenance: 5.0      # Penalty for deviating from target height
+
+  # Secondary objectives
+  energy_efficiency: 0.1       # Penalty for large control actions
+  smoothness: 0.05             # Penalty for action changes (jerk)
+  foot_contact: 0.5            # Reward for maintaining ground contact
+
+  # Safety penalties
+  fall_penalty: -100.0         # Terminal penalty for falling
+  joint_limit_penalty: -10.0   # Penalty for approaching joint limits
+  torque_limit_penalty: -5.0   # Penalty for excessive torque
+
+termination_conditions:
+  base_z_below: 0.40           # Fall detection
+  roll_exceeds: 1.0            # ~57 degrees
+  pitch_exceeds: 1.0           # ~57 degrees
+  max_episode_steps: 1000      # 20 seconds at 50Hz
+
+curriculum:
+  enabled: true
+  stages:
+    - name: "stand_balance"
+      target_velocity: 0.0
+      terrain: "flat"
+      duration: 200_000_steps
+    - name: "slow_walk"
+      target_velocity: 0.2
+      terrain: "flat"
+      duration: 300_000_steps
+    - name: "normal_walk"
+      target_velocity: 0.5
+      terrain: "flat"
+      duration: 300_000_steps
+    - name: "uneven_terrain"
+      target_velocity: 0.5
+      terrain: "uneven"
+      duration: 200_000_steps
+
+domain_randomization:
+  enabled: true
+  parameters:
+    com_height: [0.75, 0.85]
+    mass_scale: [0.9, 1.1]
+    friction: [0.5, 1.0]
+    motor_strength: [0.8, 1.2]
+    latency_ms: [0, 20]
+    sensor_noise:
+      joint_position: 0.01
+      joint_velocity: 0.05
+      imu_accel: 0.1
+      imu_gyro: 0.01

@@ -1,0 +1,101 @@
+# OpenHumanoid v1.0 - ROS2 Topic Specification
+# ROS2 Humble | DDS FastRTPS | QoS: SensorData for high freq, Reliable for commands
+
+## Published Topics
+
+### High Frequency (50 Hz)
+| Topic | Type | QoS | Description |
+|-------|------|-----|-------------|
+| `/joint_states` | sensor_msgs/JointState | SensorData | All 28 joint positions, velocities, efforts |
+| `/imu/data` | sensor_msgs/Imu | SensorData | 6-axis IMU (acceleration, angular velocity, quaternion) |
+| `/tf` | geometry_msgs/TransformStamped | SensorData | Base_link -> world transform |
+| `/foot/left` | geometry_msgs/WrenchStamped | SensorData | Left foot contact force/torque |
+| `/foot/right` | geometry_msgs/WrenchStamped | SensorData | Right foot contact force/torque |
+| `/state/estimator` | nav_msgs/Odometry | SensorData | EKF estimated CoM pose and velocity |
+
+### Medium Frequency (10-30 Hz)
+| Topic | Type | QoS | Description |
+|-------|------|-----|-------------|
+| `/camera/color/image_raw` | sensor_msgs/Image | SensorData | RGB camera feed (640x480) |
+| `/camera/depth/image_raw` | sensor_msgs/Image | SensorData | Depth image (640x480) |
+| `/camera/depth/color/points` | sensor_msgs/PointCloud2 | SensorData | Registered point cloud |
+| `/slam/pose` | geometry_msgs/PoseStamped | Reliable | Visual SLAM estimated pose |
+| `/perception/objects` | vision_msgs/Detection2DArray | Reliable | Detected objects (YOLOv8) |
+
+### Low Frequency (1-5 Hz)
+| Topic | Type | QoS | Description |
+|-------|------|-----|-------------|
+| `/system/status` | diagnostic_msgs/DiagnosticArray | Reliable | System health, temperatures, errors |
+| `/power/battery` | sensor_msgs/BatteryState | Reliable | Battery voltage, current, SOC, temperature |
+| `/gait/phase` | std_msgs/String | Reliable | Current gait phase (double/left/right) |
+| `/control/mode` | std_msgs/String | Reliable | Active control mode |
+
+## Subscribed Topics
+
+| Topic | Type | QoS | Description |
+|-------|------|-----|-------------|
+| `/cmd_vel` | geometry_msgs/Twist | Reliable | Teleop velocity commands (vx, vy, yaw_rate) |
+| `/cmd_mode` | std_msgs/String | Reliable | Mode switch (stand/walk/teleop/ai) |
+| `/cmd_joints` | trajectory_msgs/JointTrajectory | Reliable | Direct joint position commands |
+| `/cmd_gait` | std_msgs/Float64MultiArray | Reliable | Gait parameters [step_length, step_width, step_height, step_duration] |
+| `/emergency_stop` | std_msgs/Empty | Reliable | Trigger emergency stop |
+| `/emergency_reset` | std_msgs/Empty | Reliable | Reset from emergency |
+
+## Parameter Server (/open_humanoid_control)
+
+```yaml
+# Control Parameters
+control:
+  balance:
+    kp_com: 100.0
+    kd_com: 20.0
+    kp_orientation: 50.0
+    kd_orientation: 10.0
+    com_height: 0.80
+    preview_steps: 320
+  gait:
+    step_length: 0.15
+    step_width: 0.16
+    step_height: 0.05
+    step_duration: 0.80
+    double_support_ratio: 0.20
+  joint_pd:
+    kp: 50.0
+    kd: 2.0
+    max_force: 100.0
+
+# Safety Parameters
+safety:
+  fall_threshold_z: 0.40
+  fall_threshold_roll: 1.0
+  fall_threshold_pitch: 1.0
+  joint_limit_margin: 0.05
+  max_joint_velocity: 6.0
+  max_joint_torque: 15.0
+  emergency_stop_timeout_ms: 100
+  watchdog_timeout_ms: 500
+
+# Power Parameters
+power:
+  battery_low_voltage: 22.0
+  battery_critical_voltage: 20.0
+  max_continuous_current: 40.0
+  max_peak_current: 80.0
+  temperature_warning: 70.0
+  temperature_critical: 85.0
+
+# Simulation Parameters
+simulation:
+  use_gui: false
+  sim_freq: 240.0
+  control_freq: 50.0
+  gravity: [0.0, 0.0, -9.81]
+  terrain_type: "flat"
+
+# AI Parameters
+ai:
+  policy_type: "act"
+  observation_fps: 10
+  action_chunk_size: 10
+  model_path: "models/act_policy.pt"
+  use_tensorrt: true

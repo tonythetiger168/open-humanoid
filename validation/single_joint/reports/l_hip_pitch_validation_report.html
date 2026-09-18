@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Single Joint Validation Report - l_hip_pitch</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .header { background: #2196F3; color: white; padding: 20px; border-radius: 8px; }
+        .section { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .pass { color: #4CAF50; font-weight: bold; }
+        .fail { color: #F44336; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f0f0f0; }
+        .plot { max-width: 100%; margin: 10px 0; border: 1px solid #ddd; }
+        .summary { font-size: 1.2em; padding: 15px; background: #e8f5e9; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>OpenHumanoid v1.0 - Single Joint Validation Report</h1>
+        <p>Joint: <strong>l_hip_pitch</strong> | Type: <strong>hip_pitch</strong></p>
+        <p>Date: 2026-09-07</p>
+    </div>
+    <div class="summary">
+        <h2>Overall Status: <span class="pass">PASS</span></h2>
+        <p>Passed: 3/3 tests</p>
+    </div>
+    <div class="section">
+        <h2>Encoder Calibration <span class="pass">PASS</span></h2>
+        <table>
+            <tr><th>Direction Correct</th><td>True</td></tr>
+            <tr><th>Zero Error</th><td>0.0023 deg</td></tr>
+            <tr><th>Resolution</th><td>0.0225 deg</td></tr>
+            <tr><th>Repeatability Std</th><td>0.0018 deg</td></tr>
+        </table>
+    </div>
+    <div class="section">
+        <h2>Friction Identification <span class="pass">PASS</span></h2>
+        <table>
+            <tr><th>Torque Constant Kt</th><td>0.0952 Nm/A</td></tr>
+            <tr><th>Coulomb Friction</th><td>0.3512 Nm</td></tr>
+            <tr><th>Viscous Friction</th><td>0.0823 Nm/(rad/s)</td></tr>
+            <tr><th>Backlash</th><td>0.0056 deg</td></tr>
+        </table>
+        <img class="plot" src="data/friction_curve.png" alt="Friction Curve">
+    </div>
+    <div class="section">
+        <h2>Performance Tests <span class="pass">PASS</span></h2>
+        <table>
+            <tr><th>Rise Time</th><td>0.125 s</td></tr>
+            <tr><th>Settling Time</th><td>0.380 s</td></tr>
+            <tr><th>Overshoot</th><td>4.2 %</td></tr>
+            <tr><th>Max Velocity</th><td>4.52 rad/s</td></tr>
+            <tr><th>Max Torque</th><td>14.8 Nm</td></tr>
+            <tr><th>Max Temperature</th><td>52.3 C</td></tr>
+        </table>
+        <img class="plot" src="data/step_response.png" alt="Step Response">
+        <img class="plot" src="data/bode_plot.png" alt="Bode Plot">
+        <img class="plot" src="data/thermal_curve.png" alt="Thermal Curve">
+    </div>
+</body>
+</html>
